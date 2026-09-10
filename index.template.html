@@ -151,7 +151,7 @@
 
 <!-- ================= TAB 1: STRUKTUR ================= -->
 <section class="panel on" id="panel-struktur">
-  <div class="frame-wrap"><iframe id="frame-struktur" loading="lazy" title="Analisa Struktur Baja Warehouse"></iframe></div>
+  <div class="frame-wrap"><iframe id="frame-struktur" loading="lazy" data-v="1" title="Analisa Struktur Baja Warehouse"></iframe></div>
 </section>
 
 <!-- ================= TAB 2: PONDASI ================= -->
@@ -466,7 +466,7 @@ const loaded = {};
 function showTab(t) {
   document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
   document.querySelectorAll('.panel').forEach(p => p.classList.toggle('on', p.id === 'panel-' + t));
-  if (t === 'struktur' && !loaded.struktur) { document.getElementById('frame-struktur').src = 'struktur.html'; loaded.struktur = 1; }
+  if (t === 'struktur' && !loaded.struktur) { document.getElementById('frame-struktur').src = 'struktur.html?v=full'; loaded.struktur = 1; }
   if (t === 'pondasi' && !loaded.pondasi) { document.getElementById('frame-pondasi').src = 'pondasi.html'; loaded.pondasi = 1; }
   if (t === 'pustaka') renderTable();
 }
