@@ -1,0 +1,149 @@
+<!-- ================= TAB 4: SAMBUNGAN ================= -->
+<section class="panel" id="panel-sambungan">
+  <div class="pk">
+    <div class="tabs2">
+      <button class="on" data-sub="sb Beam">Sambungan Balok–Kolom (End Plate + Baut)</button>
+      <button data-sub="sb Base">Base Plate Kolom (Angkur + Pelat Dasar)</button>
+    </div>
+    <div class="mcard">
+      <h3 id="sbTitle">A. SAMBUNGAN BALOK–KOLOM — END PLATE & BAUT (SNI 1729:2020, LRFD)</h3>
+      <div class="bd">
+        <div class="fgrid" id="sbAInputs">
+          <div class="fitem"><label>Momen rencana Mu (kNm)</label><input id="sbMu" type="number" value="120" step="1"></div>
+          <div class="fitem"><label>Gaya geser Vu (kN)</label><input id="sbVu" type="number" value="95" step="1"></div>
+          <div class="fitem"><label>Baris baut tarik (n1)</label><input id="sbRows" type="number" value="4" step="1" min="1"></div>
+          <div class="fitem"><label>Baut per baris (n2)</label><input id="sbCols" type="number" value="2" step="1" min="1"></div>
+          <div class="fitem"><label>Diameter baut</label><select id="sbDia"><option value="20">M20 (Ab=245 mm²)</option><option value="22">M22 (Ab=303 mm²)</option><option value="24" selected>M24 (Ab=353 mm²)</option><option value="27">M27 (Ab=459 mm²)</option></select></div>
+          <div class="fitem"><label>Mutu baut</label><select id="sbMutu"><option value="600">8.8 (Fub=600 MPa)</option><option value="1000">10.9 (Fub=1000 MPa)</option></select></div>
+          <div class="fitem"><label>Jarak baris baut p (mm)</label><input id="sbP" type="number" value="90" step="5"></div>
+          <div class="fitem"><label>Jarak arah geser g (mm)</label><input id="sbG" type="number" value="70" step="5"></div>
+          <div class="fitem"><label>Tebal end plate tp (mm)</label><input id="sbTp" type="number" value="16" step="1"></div>
+          <div class="fitem"><label>Fu pelat/baja (MPa)</label><input id="sbFu" type="number" value="410" step="10"></div>
+        </div>
+        <div id="sbBInputs" style="display:none" class="fgrid">
+          <div class="fitem"><label>Aksial rencana Pu (kN)</label><input id="bpPu" type="number" value="380" step="1"></div>
+          <div class="fitem"><label>Momen rencana Mu (kNm)</label><input id="bpMu" type="number" value="85" step="1"></div>
+          <div class="fitem"><label>Panjang pelat L (mm)</label><input id="bpL" type="number" value="450" step="10"></div>
+          <div class="fitem"><label>Lebar pelat B (mm)</label><input id="bpB" type="number" value="450" step="10"></div>
+          <div class="fitem"><label>Jumlah angkur (bh)</label><select id="bpN"><option value="4">4</option><option value="6">6</option><option value="8">8</option></select></div>
+          <div class="fitem"><label>Diameter angkur</label><select id="bpDia"><option value="24">M24 (Ab=353 mm²)</option><option value="30">M30 (Ab=561 mm²)</option><option value="36" selected>M36 (Ab=817 mm²)</option></select></div>
+          <div class="fitem"><label>Mutu angkur</label><select id="bpMutu"><option value="500">5.6 (Fub=500 MPa)</option><option value="600">8.8 (Fub=600 MPa)</option></select></div>
+          <div class="fitem"><label>Tebal pelat dasar tp (mm)</label><input id="bpTp" type="number" value="25" step="1"></div>
+          <div class="fitem"><label>Tinggi profil d (mm)</label><input id="bpD" type="number" value="300" step="10"></div>
+          <div class="fitem"><label>Lebar sayap bf (mm)</label><input id="bpBf" type="number" value="300" step="10"></div>
+          <div class="fitem"><label>Mutu beton pedestal f'c (MPa)</label><input id="bpFc" type="number" value="24.9" step="0.1"></div>
+          <div class="fitem"><label>Jarak baris angkr dr tepi c (mm)</label><input id="bpC" type="number" value="70" step="5"></div>
+        </div>
+        <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap">
+          <button class="btn p" id="btnHitSb">▶ Hitung Sambungan</button>
+          <button class="btn s" id="sbExpW">⬇ Word</button>
+          <button class="btn s" id="sbExpX">⬇ Excel</button>
+          <button class="btn s" id="sbExpP">⬇ PDF</button>
+        </div>
+        <div class="res-grid" id="sbRes"></div>
+        <div class="formula" id="sbFormula"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TAB 5: RAB & BOQ ================= -->
+<section class="panel" id="panel-rab">
+  <div class="pk">
+    <div class="mcard">
+      <h3>RINCI ANGGARAN BIAYA (RAB) & BILL OF QUANTITY (BOQ) — GUDANG BAJA</h3>
+      <div class="bd">
+        <div style="overflow:auto">
+          <table class="mtable" id="rabTable">
+            <thead><tr><th style="text-align:left">URAIAN PEKERJAAN</th><th style="text-align:left">SPESIFIKASI</th><th>QTY</th><th>SAT</th><th>HARGA SAT (Rp)</th><th>JUMLAH (Rp)</th><th></th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap">
+          <button class="btn s" id="rabAdd">+ Baris</button>
+          <button class="btn p" id="btnHitRab">▶ Hitung RAB</button>
+          <button class="btn s" id="rabExpW">⬇ Word</button>
+          <button class="btn s" id="rabExpX">⬇ Excel</button>
+          <button class="btn s" id="rabExpP">⬇ PDF</button>
+        </div>
+        <div class="res-grid" id="rabRes"></div>
+        <div class="fgrid" style="margin-top:10px; max-width:560px">
+          <div class="fitem"><label>Overhead & Profit Jasa (%)</label><input id="rabOH" type="number" value="12" step="1"></div>
+          <div class="fitem"><label>PPN 11% (ya/tidak)</label><select id="rabPpn"><option value="1">Ya (11%)</option><option value="0">Tidak</option></select></div>
+          <div class="fitem"><label>PPh Final Jas Konstruksi (%)</label><input id="rabPph" type="number" value="3" step="0.5"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TAB 6: SCHEDULE & KURVA S ================= -->
+<section class="panel" id="panel-schedule">
+  <div class="pk">
+    <div class="mcard">
+      <h3>TIME SCHEDULE & KURVA S — PELAKSANAAN GUDANG BAJA</h3>
+      <div class="bd">
+        <div style="overflow:auto">
+          <table class="mtable" id="schTable">
+            <thead><tr><th style="text-align:left">PEKERJAAN</th><th>MULAI (mgg)</th><th>DURASI (mgg)</th><th>BOBOT (%)</th><th>SELESAI</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; align-items:center">
+          <button class="btn s" id="schAdd">+ Baris</button>
+          <button class="btn p" id="btnHitSch">▶ Susun Jadwal & Kurva S</button>
+          <button class="btn s" id="schExpW">⬇ Word</button>
+          <button class="btn s" id="schExpX">⬇ Excel</button>
+          <button class="btn s" id="schExpP">⬇ PDF</button>
+          <span style="font-size:11px;color:#64748b">Realisasi minggu ke <input id="schCur" type="number" value="4" min="1" style="width:52px;border:1px solid var(--garis);border-radius:6px;padding:4px"> progress aktual <input id="schAct" type="number" value="18" min="0" style="width:52px;border:1px solid var(--garis);border-radius:6px;padding:4px"> %</span>
+        </div>
+        <div class="svg-box" style="margin-top:12px; background:#fff; border:1px solid var(--garis)">
+          <svg id="sCurve" viewBox="0 0 800 360" style="width:100%;max-width:800px"></svg>
+        </div>
+        <div class="res-grid" id="schRes"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CHATBOT ================= -->
+<button class="cb-fab" id="cbFab" title="Chatbot Asisten">💬</button>
+<div class="cb-panel" id="cbPanel">
+  <div class="cb-h"><span>🤖 ASISTEN TEKNIK — Ir. Mohamad Hartadi</span><button id="cbClose">✕</button></div>
+  <div class="cb-msgs" id="cbMsgs"></div>
+  <div class="cb-chips" id="cbChips"></div>
+  <div class="cb-in"><input id="cbInput" placeholder="Tanya topik teknis…"><button id="cbSend">➤</button></div>
+</div>
+
+<!-- ================= MODAL BANTUAN ================= -->
+<div class="m2" id="mHelp">
+  <div class="mc">
+    <div class="mh"><h2>❓ BANTUAN — METRIK, PENJELASAN & FITUR</h2><button class="m-x" onclick="document.getElementById('mHelp').classList.remove('on')">✕</button></div>
+    <div class="mb" id="helpBody"></div>
+  </div>
+</div>
+
+<!-- ================= MODAL PROGRAMMER ================= -->
+<div class="m2" id="mDev">
+  <div class="mc">
+    <div class="mh"><h2>👨‍💻 DEV PROGRAMMER — DATA PROGRAMMER & APLIKASI TERDEPLOY</h2><button class="m-x" onclick="document.getElementById('mDev').classList.remove('on')">✕</button></div>
+    <div class="mb">
+      <div class="devgrid">
+        <div class="devcard"><div class="ic">📘</div><a href="https://facebook.com/m.hartadi" target="_blank">facebook.com/m.hartadi</a></div>
+        <div class="devcard"><div class="ic">📝</div><a href="https://newbieonline7.blogspot.com" target="_blank">newbieonline7.blogspot.com</a></div>
+        <div class="devcard"><div class="ic">📞</div><a href="https://wa.me/6282231036047" target="_blank">0822 3103 6047 (WhatsApp)</a></div>
+      </div>
+      <p style="font-size:11.5px;margin:6px 0 2px">Software engineer sipil — jaringan aplikasi teknis di GitHub Pages (klik untuk membuka di tab baru):</p>
+      <div class="applist" id="devApps"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= SCREENSAVER SHELL ================= -->
+<div class="ss" id="ssShell">
+  <div class="jam" id="ssJam">00:00</div>
+  <div class="tgl" id="ssTgl"></div>
+  <div class="q" id="ssQuote"></div>
+  <div class="by">— Ir. Mohamad Hartadi · Warehouse Baja Pro v3.0 —</div>
+  <div class="hint">Klik di mana saja untuk kembali</div>
+</div>

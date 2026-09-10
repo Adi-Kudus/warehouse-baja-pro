@@ -1186,6 +1186,14 @@
             if(isMuted && synth) synth.cancel();
         }
 
+        // ---- kontrol dari shell Warehouse Baja Pro ----
+        window.addEventListener('message', function(e) {
+            if (e.data === 'shellMute' && !isMuted) toggleMute();
+            if (e.data === 'shellUnmute' && isMuted) toggleMute();
+            if (e.data === 'shellScreensaver') { activateScreensaverManual(); }
+            if (e.data === 'shellScreensaverOff') { resetTimer(); }
+        });
+
         const synth = window.speechSynthesis;
         let botVoice = null;
         let availableVoices = [];
