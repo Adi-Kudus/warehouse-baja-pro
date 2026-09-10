@@ -5054,6 +5054,9 @@ ${t.map((i,r)=>`<Relationship Id="rId${r+1}" Type="http://schemas.openxmlformats
     .gp-tools button{border:1px solid #cbd5e1;background:#fff;color:#1f4e79;font-size:10.5px;font-weight:700;
       padding:4px 9px;border-radius:7px;cursor:pointer}
     .gp-tools button.on{background:#1f4e79;color:#fff;border-color:#1f4e79}
+    .gp-tools button#gpNot{flex:1;min-width:110px;padding:5px 10px;font-size:11px;border-radius:8px}
+    .gp-tools button#gpNot.on{background:#b45309;border-color:#b45309}
+    .gp-tools button#gpNot:not(.on){background:#e2e8f0;color:#64748b;border-color:#cbd5e1}
     .gp-svg{padding:8px 10px 4px;background:#fff}
     .gp-edit{padding:8px 10px 10px;border-top:1px solid #eef2f7;background:#f8fafc;display:none}
     .gp-edit .row{display:flex;gap:6px;align-items:center;margin-top:6px;flex-wrap:wrap}
@@ -5135,10 +5138,11 @@ ${t.map((i,r)=>`<Relationship Id="rId${r+1}" Type="http://schemas.openxmlformats
 
   /* ---------- gambar SVG ---------- */
   function line(x1, y1, x2, y2, cls, w) {
-    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="${cls}" stroke="${cls === "gp-dim" ? "#b45309" : "#1f4e79"}" stroke-width="${w || (cls === "gp-dim" ? 1.1 : 2.6)}" ${cls === "gp-dim" ? 'marker-start="url(#gpArrow)" marker-end="url(#gpArrow)"' : ""}/>`;
+    return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" class="${cls === "gp-ext" ? "" : cls}" stroke="${cls === "gp-dim" || cls === "gp-ext" ? "#b45309" : "#1f4e79"}" stroke-width="${w || (cls === "gp-dim" ? 1.1 : 2.6)}" ${cls === "gp-dim" ? 'marker-start="url(#gpArrow)" marker-end="url(#gpArrow)"' : ""}/>`;
   }
-  function dimText(x, y, t) {
-    return `<text x="${x}" y="${y}" class="gp-dim" text-anchor="middle" font-size="10.5" font-weight="700" fill="#b45309" font-family="Consolas">${t}</text>`;
+  function dimText(x, y, t, rot) {
+    const tr = rot ? ` transform="rotate(${rot} ${x} ${y})"` : "";
+    return `<text x="${x}" y="${y}" class="gp-dim" text-anchor="middle" font-size="10" font-weight="700" fill="#b45309" font-family="Consolas" paint-order="stroke" stroke="#fff" stroke-width="3.5" stroke-linejoin="round"${tr}>${t}</text>`;
   }
   function render(mode) {
     const P = getVal("Panjang") || 60, B = getVal("Bentang") || getVal("Lebar") || 24,
@@ -5149,7 +5153,7 @@ ${t.map((i,r)=>`<Relationship Id="rId${r+1}" Type="http://schemas.openxmlformats
     const svg = document.getElementById("gpSvg");
     let s = `<defs><marker id="gpArrow" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0.8 L3.5,3.5 L0,6.2" fill="none" stroke="#b45309" stroke-width="1"/></marker></defs>`;
     if (mode) { /* POTONGAN PORTAL (depan) */
-      const ox = 170, oy = 178, sc = Math.min(1, 110 / (B / 2), 120 / h2);
+      const ox = 170, oy = 176, sc = Math.min(9.2, 100 / (B / 2), 112 / h2);
       const xl = ox - (B / 2) * sc, xr = ox + (B / 2) * sc;
       const yG = oy, yE = oy - h1 * sc, yR = oy - h2 * sc;
       s += `<line x1="30" y1="${yG}" x2="310" y2="${yG}" stroke="#64748b" stroke-width="1.4"/>`;
@@ -5157,21 +5161,22 @@ ${t.map((i,r)=>`<Relationship Id="rId${r+1}" Type="http://schemas.openxmlformats
       s += line(xl, yE, ox, yR) + line(ox, yR, xr, yE);
       s += `<text x="${ox}" y="${yR - 6}" font-size="9" fill="#64748b" text-anchor="middle">▲ bubungan</text>`;
       if (notasiOn) {
-        const yDim = yG + 22;
+        const yDim = yG + 24;
+        s += line(xl, yG, xl, yDim, "gp-ext", 0.7) + line(xr, yG, xr, yDim, "gp-ext", 0.7);
         s += line(xl, yDim, xr, yDim, "gp-dim");
-        s += dimText(ox, yDim + 12, `BENTANG B = ${B.toFixed(1)} m`);
-        const xd1 = xl - 30, xd2 = xl - 8;
-        s += line(xd1, yG, xd1, yE, "gp-dim") + dimText(xd1 - 5, (yG + yE) / 2, `h eave = ${h1.toFixed(2)} m`);
-        const xd3 = xr + 8, xd4 = xr + 30;
-        s += line(xd3, yG, xd3, yR, "gp-dim") + dimText(xd4 + 5, (yG + yR) / 2, `h puncak = ${h2.toFixed(2)} m`);
+        s += dimText(ox, yDim + 13, `BENTANG B = ${B.toFixed(1)} m`);
+        const xd1 = xl - 20;
+        s += line(xd1, yG, xd1, yE, "gp-dim") + dimText(xd1 - 11, (yG + yE) / 2, `h eave = ${h1.toFixed(2)} m`, -90);
+        const xd3 = xr + 20;
+        s += line(xd3, yG, xd3, yR, "gp-dim") + dimText(xd3 + 11, (yG + yR) / 2, `h puncak = ${h2.toFixed(2)} m`, -90);
         const ax = ox - 34 * Math.cos(rad), ay = yR + 34 * Math.sin(rad);
         s += `<path d="M ${ox} ${yR} A 34 34 0 0 1 ${ax} ${ay}" fill="none" stroke="#b45309" stroke-width="1.1"/>`;
-        s += `<text x="${ox - 44}" y="${yR + 20}" font-size="10.5" font-weight="700" fill="#b45309" font-family="Consolas" class="gp-dim">α = ${alpha.toFixed(1)}°</text>`;
+        s += dimText(ox - 40, yR + 30, `α = ${alpha.toFixed(1)}°`);
         s += `<rect x="${xl + 4}" y="${yE + 4}" width="8" height="5" fill="#fff" stroke="#1f4e79"/>`;
       }
       s += `<text x="32" y="222" font-size="9.5" fill="#334155" font-family="Segoe UI">POTONGAN PORTAL — ${B.toFixed(0)}×${P.toFixed(0)} m, ${alpha.toFixed(1)}°</text>`;
     } else { /* TAMPAK MEMANJANG (samping) */
-      const ox = 24, oy = 168, sc = Math.min(1, 268 / P, 110 / h2);
+      const ox = 24, oy = 166, sc = Math.min(9.2, 250 / P, 110 / h2);
       const ye = oy - h2 * sc;
       s += `<line x1="18" y1="${oy}" x2="300" y2="${oy}" stroke="#64748b" stroke-width="1.4"/>`;
       let n = Math.max(2, Math.round(P / dx));
@@ -5181,13 +5186,13 @@ ${t.map((i,r)=>`<Relationship Id="rId${r+1}" Type="http://schemas.openxmlformats
       }
       s += line(ox, ye, ox + P * sc, ye);
       if (notasiOn) {
-        const yDim = oy + 20;
+        const yDim = oy + 22;
+        s += line(ox, oy, ox, yDim, "gp-ext", 0.7) + line(ox + P * sc, oy, ox + P * sc, yDim, "gp-ext", 0.7);
         s += line(ox, yDim, ox + P * sc, yDim, "gp-dim");
-        s += dimText(ox + (P * sc) / 2, yDim + 12, `PANJANG P = ${P.toFixed(1)} m`);
-        s += line(ox, oy + 2, ox, oy + 2, "", 0);
-        s += dimText(ox + 16, oy - 8, `@ ${dx.toFixed(1)} m × ${n} portal`);
-        const xd3 = ox + P * sc + 8, xd4 = ox + P * sc + 30;
-        s += line(xd3, oy, xd3, ye, "gp-dim") + dimText(xd4 + 4, (oy + ye) / 2, `h = ${h2.toFixed(2)} m`);
+        s += dimText(ox + (P * sc) / 2, yDim + 13, `PANJANG P = ${P.toFixed(1)} m`);
+        s += dimText(ox + 14, ye + 16, `@ ${dx.toFixed(1)} m × ${n} portal`);
+        const xd3 = ox + P * sc + 20;
+        s += line(xd3, oy, xd3, ye, "gp-dim") + dimText(xd3 + 11, (oy + ye) / 2, `h = ${h2.toFixed(2)} m`, -90);
       }
       s += `<text x="26" y="222" font-size="9.5" fill="#334155" font-family="Segoe UI">TAMPAK MEMANJANG — ${n} portal @ ${dx.toFixed(1)} m</text>`;
     }
